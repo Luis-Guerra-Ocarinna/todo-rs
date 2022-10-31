@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Record of a Board",
+    "definitions": {
+        "id": {
+            "type": "number"
+        },
+        "task": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "timer": {
+                    "type": [
+                        "null"
+                    ]
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "Todo",
+                        "InProgress",
+                        "Done",
+                        "Paused"
+                    ]
+                }
+            },
+            "required": [
+                "title",
+                "status"
+            ]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "#/definitions/id"
+        },
+        "tasks": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/task"
+            }
+        }
+    }
+}

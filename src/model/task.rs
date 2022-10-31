@@ -1,4 +1,6 @@
-#[derive(Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
     pub title: String,
     pub description: Option<String>,
@@ -6,7 +8,7 @@ pub struct Task {
     pub status: TaskStatus,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum TaskStatus {
     Todo,
     InProgress,
@@ -14,9 +16,11 @@ pub enum TaskStatus {
     Paused,
 }
 
-#[derive(Debug)]
+type InitialTime = String;
+type ElapsedTime = String;
+
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Timer {
-    Started,
-    Ended,
-    Total,
+    Started(InitialTime),
+    Ended(ElapsedTime),
 }

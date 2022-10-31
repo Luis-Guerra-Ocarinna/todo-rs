@@ -1,37 +1,24 @@
 mod args;
 
 use crate::{
-    model::{
-        board::Board,
-        task::{Task, TaskStatus},
-    },
-    Run,
+    model::task::{Task, TaskStatus},
+    Context, Run,
 };
 use clap::Parser;
 
 use self::args::{AddTaskCmd, Crud};
 
 pub struct Cli {
-    board: Board,
+    context: Context,
 }
 
 impl Cli {
-    pub fn new() -> Self {
-        Self {
-            board: Board {
-                id: 1,
-                tasks: vec![Task {
-                    title: "Test".to_string(),
-                    description: None,
-                    time: None,
-                    status: TaskStatus::Todo,
-                }],
-            },
-        }
+    pub fn new(context: Context) -> Self {
+        Self { context }
     }
 
     fn list(&self) {
-        println!("Tasks: {:#?}", self.board.tasks);
+        println!("{:?}", self.context.board_repo.list_tasks());
     }
 
     fn add(&mut self, task: &AddTaskCmd) {
@@ -42,9 +29,7 @@ impl Cli {
             status: TaskStatus::Todo,
         };
 
-        self.board.tasks.push(task);
-
-        println!("Task added! {:#?}", self.board.tasks);
+        self.context.board_repo.add_task(task);
     }
 }
 

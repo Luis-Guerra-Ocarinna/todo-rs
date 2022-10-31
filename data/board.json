@@ -1,0 +1,54 @@
+{
+  "$schema": "./schema/board.json",
+  "id": 123,
+  "tasks": [
+    {
+      "title": "Task 1",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "Task 2",
+      "description": "Lorem ipsum",
+      "time": null,
+      "status": "InProgress"
+    },
+    {
+      "title": "Test",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "AAAA",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "AAAA",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "AAAA",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "AAAA",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    },
+    {
+      "title": "AAAA",
+      "description": null,
+      "time": null,
+      "status": "Todo"
+    }
+  ]
+}
