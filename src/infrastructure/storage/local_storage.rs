@@ -12,11 +12,11 @@ pub struct LocalStorage;
 impl Storage for LocalStorage {
     fn load(&self) -> Board {
         fs::read_to_string(FILE)
-            .map(|s| serde_json::from_str(&s).unwrap())
+            .map(|s| serde_json::from_str(&s).unwrap_or_default())
             .unwrap_or_default()
     }
 
-    fn save(&self, data: Board) {
+    fn save(&self, data: &Board) {
         let mut json = serde_json::to_string_pretty(&data).unwrap();
         json.insert_str(1, SCHEMA);
 

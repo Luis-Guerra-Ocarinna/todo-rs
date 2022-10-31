@@ -49,7 +49,7 @@ unsafe fn setup() {
 Objetivo:
     [x] criar/listar tarefas
     [x] persistir lol
-    [] deletar/atualizar ^
+    [x] deletar/atualizar ^
     [] implementar cronometro
     [] versão webapi
 /* Models

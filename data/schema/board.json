@@ -3,11 +3,15 @@
     "title": "Record of a Board",
     "definitions": {
         "id": {
-            "type": "number"
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
         },
         "task": {
             "type": "object",
             "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
                 "title": {
                     "type": "string"
                 },
@@ -47,7 +51,8 @@
             "type": "array",
             "items": {
                 "$ref": "#/definitions/task"
-            }
+            },
+            "uniqueItems": true
         }
     }
 }
