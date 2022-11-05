@@ -1,0 +1,28 @@
+name: Continuous Deployment
+
+on: [workflow_call]
+
+jobs:
+  # publish-web:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: echo idk
+
+  build-artifacts:
+    uses: ./.github/workflows/deploy.yml
+
+  publish-release:
+    needs: [build-artifacts]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Publish bins
+        uses: softprops/action-gh-release@v1
+        with:
+          # actions/download-artifact download to a dir with same name
+          files: "./*/*"
+          fail_on_unmatched_files: true

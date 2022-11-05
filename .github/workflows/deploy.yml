@@ -1,0 +1,46 @@
+name: Build and Upload
+
+on: [workflow_call]
+
+jobs:
+  build:
+    continue-on-error: false
+    name: ${{ matrix.job.target }} (${{ matrix.job.os }})
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        job:
+          - { target: x86_64-pc-windows-gnu, os: windows-2019 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Extract crate information
+        shell: bash
+        run: |
+          echo "PROJECT_NAME=$(sed -n 's/^name = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> $GITHUB_ENV
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          target: ${{ matrix.job.target }}
+
+      - name: Build
+        run: cargo build --locked --release --target=${{ matrix.job.target }}
+
+      - name: Prepare executables
+        id: bins
+        shell: bash
+        run: ./.github/scripts/prepare_executables.sh
+        env:
+          MATRIX_TARGET: ${{ matrix.job.target }}
+          DEPLOY_DIR: "_tmp-deploy"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.bins.outputs.BIN_PUBLISH_NAME }}
+          path: ${{ steps.bins.outputs.BIN_PATH }}
