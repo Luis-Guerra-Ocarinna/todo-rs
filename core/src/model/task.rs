@@ -1,11 +1,8 @@
+use crate::{gen_id, Id};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-
-use crate::{serializable_uuid, Id};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
-    #[serde(with = "serializable_uuid")]
     id: Id,
     pub title: String,
     pub description: Option<String>,
@@ -14,23 +11,18 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(
-        title: String,
-        description: Option<String>,
-        time: Option<Timer>,
-        status: TaskStatus,
-    ) -> Self {
+    pub fn new(title: String, description: Option<String>) -> Self {
         Self {
-            id: Uuid::new_v4(),
+            id: gen_id(),
             title,
             description,
-            time,
-            status,
+            time: None,
+            status: TaskStatus::Todo,
         }
     }
 
-    pub fn id(&self) -> Uuid {
-        self.id
+    pub fn id(&self) -> &Id {
+        &self.id
     }
 }
 

@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Record of a Board",
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "./id.json/#/definitions/uuid"
+        },
+        "tasks": {
+            "type": "array",
+            "items": {
+                "$ref": "./task.json"
+            },
+            "uniqueItems": true
+        }
+    }
+}

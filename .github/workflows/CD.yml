@@ -16,13 +16,21 @@ jobs:
     needs: [build-artifacts]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
 
       - name: Download Artifacts
         uses: actions/download-artifact@v3
+        with:
+          path: build-artifacts
+
+      - name: Prepare Config
+        run: tar -zcf config.tar.gz config
 
       - name: Publish bins
         uses: softprops/action-gh-release@v1
         with:
           # actions/download-artifact download to a dir with same name
-          files: "./*/*"
+          files: |
+            ./build-artifacts/*/*
+            config.tar.gz
           fail_on_unmatched_files: true

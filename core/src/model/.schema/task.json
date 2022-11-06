@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Record of a Task",
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "./id.json/#/definitions/id"
+        },
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "timer": {
+            "type": [
+                "null"
+            ]
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "Todo",
+                "InProgress",
+                "Done",
+                "Paused"
+            ]
+        }
+    },
+    "required": [
+        "title",
+        "status"
+    ]
+}

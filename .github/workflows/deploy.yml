@@ -19,8 +19,8 @@ jobs:
       - name: Extract crate information
         shell: bash
         run: |
-          echo "PROJECT_NAME=$(sed -n 's/^name = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> $GITHUB_ENV
-          echo "PROJECT_VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> $GITHUB_ENV
+          echo "PROJECT_NAME=$(sed -n 's/^name = "\(.*\)"/\1/p' cli/Cargo.toml | head -n1)" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' cli/Cargo.toml | head -n1)" >> $GITHUB_ENV
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -44,3 +44,4 @@ jobs:
         with:
           name: ${{ steps.bins.outputs.BIN_PUBLISH_NAME }}
           path: ${{ steps.bins.outputs.BIN_PATH }}
+          if-no-files-found: error

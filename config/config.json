@@ -1,0 +1,5 @@
+{
+    "storage_location": "Local",
+    "storage_type": "Json",
+    "local_storage_dir": "./data"
+}
