@@ -57,7 +57,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["add", "aa"],
+            "args": [],
             "cwd": "${workspaceFolder}"
         },
         {

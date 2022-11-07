@@ -6,7 +6,7 @@ pub struct Task {
     id: Id,
     pub title: String,
     pub description: Option<String>,
-    pub time: Option<Timer>,
+    pub timer: Option<Timer>,
     pub status: TaskStatus,
 }
 
@@ -16,7 +16,7 @@ impl Task {
             id: gen_id(),
             title,
             description,
-            time: None,
+            timer: None,
             status: TaskStatus::Todo,
         }
     }
@@ -34,11 +34,13 @@ pub enum TaskStatus {
     Paused,
 }
 
-type InitialTime = String;
+type StartTimes = Vec<String>;
+type PauseTimes = Vec<String>;
 type ElapsedTime = String;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Timer {
-    Started(InitialTime),
-    Ended(ElapsedTime),
+pub struct Timer {
+    pub started: Option<StartTimes>,
+    pub paused: Option<PauseTimes>,
+    pub ended: Option<ElapsedTime>,
 }

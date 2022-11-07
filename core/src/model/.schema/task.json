@@ -17,8 +17,32 @@
         },
         "timer": {
             "type": [
-                "null"
-            ]
+                "null",
+                "object"
+            ],
+            "properties": {
+                "started": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "paused": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "ended": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "pattern": "\\d+ min"
+                }
+            }
         },
         "status": {
             "type": "string",
