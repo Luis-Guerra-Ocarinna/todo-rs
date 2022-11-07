@@ -245,6 +245,7 @@ impl BoardRepo for BoardJsonRepo {
     }
 }
 
+// TODO: move to a better place
 fn current_time() -> String {
     Local::now()
         .with_timezone(&FixedOffset::east(0))

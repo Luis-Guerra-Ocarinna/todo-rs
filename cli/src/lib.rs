@@ -2,11 +2,16 @@ mod args;
 mod commands;
 
 pub use self::{args::*, commands::*};
+use ascii_table::AsciiTable;
+use cli_table::{format::Justify, print_stdout, Color, Table, WithTitle};
 use commands::{
     crud::{AddTaskCmd, DeleteTaskCmd, GetTaskCmd, UpdateTaskCmd},
     task::{TaskCommands, TaskSubCommand, TimerCommands, TimerSubCommand},
 };
-use todo_rs_core::{model::task::Task, Context, Id};
+use todo_rs_core::{
+    model::task::{self, Task},
+    Context, Id,
+};
 
 pub trait Run {
     fn run(&mut self, context: Context);
@@ -28,13 +33,94 @@ impl Run for Commands {
 }
 
 fn list_tasks(mut context: Context) {
-    println!("{:#?}", context.board_repo.list_tasks());
+    #[derive(Table)]
+    struct PrintTask {
+        #[table(title = "#", color = "Color::Cyan")]
+        id: Id,
+
+        #[table(title = "Title")]
+        title: String,
+
+        #[table(title = "Status")]
+        status: String,
+
+        #[table(title = "Timer ⌚", justify = "Justify::Center")]
+        timer: String,
+    }
+
+    const NONE: &str = "X";
+
+    let tasks = context.board_repo.list_tasks();
+
+    let tasks = tasks
+        .iter()
+        .map(|task| {
+            let timer = if let task::TaskStatus::Done = task.status {
+                if let Some(task::Timer { ended, .. }) = task.timer.as_ref() {
+                    ended.as_ref().unwrap().clone()
+                } else {
+                    NONE.to_string()
+                }
+            } else {
+                match task.timer_to_string() {
+                    Some(timer) => timer,
+                    None => NONE.to_string(),
+                }
+            };
+
+            let status = match task.status {
+                task::TaskStatus::Todo => String::from("Todo"),
+                task::TaskStatus::InProgress => String::from("In Progress"),
+                task::TaskStatus::Done => String::from("Done"),
+                task::TaskStatus::Paused => String::from("Paused"),
+            };
+
+            PrintTask {
+                id: task.id().to_string(),
+                title: task.title.clone(),
+                status,
+                timer,
+            }
+        })
+        .collect::<Vec<_>>();
+
+    print_stdout(tasks.with_title()).unwrap();
 }
 
 fn get_task(mut context: Context, cmd: &GetTaskCmd) {
+    const NONE: &str = "X";
+
     match context.board_repo.get_task(&cmd.id) {
-        Some(task) => println!("{:#?}", task),
         None => panic!("Task not found"),
+        Some(task) => {
+            let title = &task.title;
+            let description = &task.description.clone().unwrap_or_default();
+            let status = &task.status.to_string();
+            let timer = &if let task::TaskStatus::Done = task.status {
+                if let Some(task::Timer { ended, .. }) = task.timer.as_ref() {
+                    ended.as_ref().unwrap().clone()
+                } else {
+                    NONE.to_string()
+                }
+            } else {
+                match task.timer_to_string() {
+                    Some(timer) => timer,
+                    None => NONE.to_string(),
+                }
+            };
+
+            let data = vec![
+                ["Title", title],
+                ["", ""],
+                ["Description", description],
+                ["Status", status],
+                ["Timer", timer],
+            ];
+
+            let ascii_table = AsciiTable::default();
+
+            ascii_table.print(data);
+        }
     }
 }
 
